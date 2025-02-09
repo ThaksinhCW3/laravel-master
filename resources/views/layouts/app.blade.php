@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
-    @include('layouts.components.header')
     @include('layouts.components.navbar')
+     @include('layouts.components.slider')
     <div class="container">
-        @include('layouts.components.slider')
+        @include('layouts.components.products')
         @yield('content')
     </div>
     @include('layouts.components.footer')
