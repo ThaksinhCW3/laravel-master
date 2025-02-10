@@ -10,8 +10,7 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     public function index(){
-        $categories = Category::all();
-        return view('admin.category.index', compact('categories'));
+        return view('admin.category.index');
     }
 
     public function create(){
@@ -26,7 +25,7 @@ class CategoryController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string',
             'meta_description' => 'nullable|string',
-            'status' => 'sometimes|boolean',
+            'status' => 'nullable|integer',
         ]);
     
         // Handle image upload
@@ -44,15 +43,49 @@ class CategoryController extends Controller
             'meta_title' => $request->meta_title,
             'meta_keywords' => $request->meta_keywords,
             'meta_description' => $request->meta_description,
-            'status' => $request->status ? 1 : 0,
+            'status' => $request->status == true ? '1' : '0',
         ]);
     
         return redirect()->route('admin.category.index')->with('success', 'Category added successfully!');
+    }    
+    public function edit($id){
+        $category = Category::findOrFail($id);
+        return view('admin.category.edit', compact('category'));
+    }
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string',
+            'meta_description' => 'nullable|string',
+            'status' => 'nullable|boolean',
+    ]);
+
+        $category = Category::findOrFail($id);
+
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('categories', 'public');
+        $category->image = $imagePath;
     }
 
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);  // Get category by ID
-        return view('admin.category.edit', compact('category'));  // Pass to view
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'meta_title' => $request->meta_title,
+            'meta_keywords' => $request->meta_keywords,
+            'meta_description' => $request->meta_description,
+            'status' => $request->status == true ? '1' : '0',
+    ]);
+
+        return redirect()->route('admin.category.index')->with('success', 'Category updated successfully!');
+    }
+
+    public function delete($id){
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully!');
     }
  }
