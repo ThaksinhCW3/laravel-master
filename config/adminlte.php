@@ -327,6 +327,12 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],
+        //Category
+        ['category' => 'categories'],
+        [
+            'text' => 'Category',
+            'url' => 'admin/category'
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

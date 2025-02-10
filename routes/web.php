@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\loginController as AdminloginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Admin\CategoryController;
 
 Route::get('/', function () {
     return view('layouts.app');
@@ -19,14 +20,14 @@ Route::group(['prefix' => 'account'],function(){
         Route::get('register',[LoginController::class,'register'])->name('account.register');
         Route::post('authenticate',[LoginController::class,'authenticate'])->name('account.authenticate');
         Route::post('processregister',[LoginController::class,'processregister'])->name('account.processregister');
-        Route::get('/about', [FrontendController::class, 'about'])->name('about');
-        Route::get('/blogs', [FrontendController::class, 'blogs'])->name('blogs');
-        Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+        Route::get('about', [FrontendController::class, 'about'])->name('about');
+        Route::get('blogs', [FrontendController::class, 'blogs'])->name('blogs');
+        Route::get('contact', [FrontendController::class, 'contact'])->name('contact');
     });
     //authed middleware
     Route::group(['middleware' => 'auth'],function (){
-        Route::get('/logout', [LoginController::class, 'logout'])->name('account.logout');
-        Route::get('/dashboard',[DashboardController::class,'index'])->name('account.dashboard');
+        Route::get('logout', [LoginController::class, 'logout'])->name('account.logout');
+        Route::get('dashboard',[DashboardController::class,'index'])->name('account.dashboard');
     });
 });
 
@@ -39,8 +40,12 @@ Route::group(['prefix' => 'admin'],function(){
     //authed middleware
     Route::group(['middleware' => 'auth'],function (){
         Route::post('logout', [LoginController::class, 'logout'])->name('admin.logout');
+    //Dashboard routes
         Route::get('dashboard',[AdminDashboardController::class,'dashboard'])->name('admin.dashboard');
-
+    //Category routes
+        Route::get('category', [CategoryController::class, 'index'])->name('admin.category.index');
+        Route::get('create', [CategoryController::class, 'create'])->name('admin.category.create');
+        Route::post('category', [CategoryController::class, 'store'])->name('admin.category.store');
     });
 });
 
