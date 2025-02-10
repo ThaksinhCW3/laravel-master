@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\loginController as AdminloginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
@@ -24,8 +25,8 @@ Route::group(['prefix' => 'account'],function(){
     });
     //authed middleware
     Route::group(['middleware' => 'auth'],function (){
-        Route::get('/logout', [LoginController::class, 'logout'])->name('account.logout');
-        Route::get('/dashboard',[DashboardController::class,'index'])->name('account.dashboard');
+        Route::get('logout', [LoginController::class, 'logout'])->name('account.logout');
+        Route::get('dashboard',[DashboardController::class,'index'])->name('account.dashboard');
     });
 });
 
@@ -38,8 +39,14 @@ Route::group(['prefix' => 'admin'],function(){
     //authed middleware
     Route::group(['middleware' => 'auth'],function (){
         Route::post('logout', [LoginController::class, 'logout'])->name('admin.logout');
+    //Dashboard routes
         Route::get('dashboard',[AdminDashboardController::class,'dashboard'])->name('admin.dashboard');
-
+    //Category routes
+        Route::get('category', [CategoryController::class, 'index'])->name('admin.category.index');
+        Route::get('create', [CategoryController::class, 'create'])->name('admin.category.create');
+        Route::post('category', [CategoryController::class, 'store'])->name('admin.category.store');
+        Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
+        Route::put('category/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
     });
 });
         Route::get('/about', [FrontendController::class, 'about'])->name('about');
