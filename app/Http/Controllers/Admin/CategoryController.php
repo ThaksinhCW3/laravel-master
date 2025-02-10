@@ -10,7 +10,8 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     public function index(){
-        return view('admin.category.index');
+        $categories = Category::all();
+        return view('admin.category.index', compact('categories'));
     }
 
     public function create(){
@@ -41,11 +42,17 @@ class CategoryController extends Controller
             'description' => $request->description,
             'image' => $imagePath,
             'meta_title' => $request->meta_title,
-            'meta_keywords' => $request->meta_keyword,
+            'meta_keywords' => $request->meta_keywords,
             'meta_description' => $request->meta_description,
             'status' => $request->status ? 1 : 0,
         ]);
     
         return redirect()->route('admin.category.index')->with('success', 'Category added successfully!');
-    }    
+    }
+
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);  // Get category by ID
+        return view('admin.category.edit', compact('category'));  // Pass to view
+    }
  }
