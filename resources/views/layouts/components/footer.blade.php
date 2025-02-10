@@ -25,11 +25,8 @@
                     <div class="col-md-3">
                         <h4 class="footer-heading">Shop Now</h4>
                         <div class="footer-underline"></div>
-                        <div class="mb-2"><a href="" class="text-white">Collections</a></div>
-                        <div class="mb-2"><a href="" class="text-white">Trending Products</a></div>
-                        <div class="mb-2"><a href="" class="text-white">New Arrivals Products</a></div>
-                        <div class="mb-2"><a href="" class="text-white">Featured Products</a></div>
-                        <div class="mb-2"><a href="" class="text-white">Cart</a></div>
+                        <div class="mb-2"><a href="{{route('shop')}}" class="text-white">shop</a></div>
+                        <div class="mb-2"><a href="{{route('cart')}}" class="text-white">Cart</a></div>
                     </div>
                     <div class="col-md-3">
                         <h4 class="footer-heading">ຕິດຕໍ່ຫາພວກເຮົາ</h4>
