@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\loginController as AdminloginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('layouts.app');
@@ -20,9 +21,7 @@ Route::group(['prefix' => 'account'],function(){
         Route::get('register',[LoginController::class,'register'])->name('account.register');
         Route::post('authenticate',[LoginController::class,'authenticate'])->name('account.authenticate');
         Route::post('processregister',[LoginController::class,'processregister'])->name('account.processregister');
-        Route::get('about', [FrontendController::class, 'about'])->name('about');
-        Route::get('blogs', [FrontendController::class, 'blogs'])->name('blogs');
-        Route::get('contact', [FrontendController::class, 'contact'])->name('contact');
+        
     });
     //authed middleware
     Route::group(['middleware' => 'auth'],function (){
@@ -52,5 +51,16 @@ Route::group(['prefix' => 'admin'],function(){
         Route::delete('category/delete/{id}', [CategoryController::class, 'delete'])->name('admin.category.delete');
     });
 });
+        Route::get('/about', [FrontendController::class, 'about'])->name('about');
+        Route::get('/blogs', [FrontendController::class, 'blogs'])->name('blogs');
+        Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+        Route::get('/shop', [FrontendController::class, 'shop'])->name('shop');
+        Route::get('/wish', [FrontendController::class, 'wish'])->name('wish');
+        Route::get('/order', [FrontendController::class, 'order'])->name('order');
+        Route::get('/profile', [FrontendController::class, 'profile'])->name('profile');
+        //Cart routesS
+        Route::get('/cart', [FrontendController::class, 'cart'])->name('cart');
+        Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+        Route::post('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
 
