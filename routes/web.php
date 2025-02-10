@@ -43,11 +43,13 @@ Route::group(['prefix' => 'admin'],function(){
     //Dashboard routes
         Route::get('dashboard',[AdminDashboardController::class,'dashboard'])->name('admin.dashboard');
     //Category routes
+    
         Route::get('category', [CategoryController::class, 'index'])->name('admin.category.index');
         Route::get('create', [CategoryController::class, 'create'])->name('admin.category.create');
         Route::post('category', [CategoryController::class, 'store'])->name('admin.category.store');
-        Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
-        Route::put('category/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+        Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('admin.category.edit');
+        Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+        Route::delete('category/delete/{id}', [CategoryController::class, 'delete'])->name('admin.category.delete');
     });
 });
 
