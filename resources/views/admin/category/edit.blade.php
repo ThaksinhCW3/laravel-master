@@ -22,8 +22,9 @@
                 @endif
 
                 {{-- Form for updating a category --}}
-                <form action="{{ route('admin.category.edit', $category->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.category.update', $category->id) }}" method="Put" enctype="multipart/form-data">
                     @csrf
+                    @method('POST')                
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -43,26 +44,6 @@
                             @if ($category->image)
                                 <img src="{{ asset('categories/public/' . $category->image) }}" width="60px" height="60px" alt="Category Image">
                             @endif
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="status">Status</label>
-                            <input type="checkbox" name="status" {{ $category->status == '1' ? 'checked' : '' }}> Active
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="meta_title">Meta Title</label>
-                            <input type="text" class="form-control" name="meta_title" value="{{ $category->meta_title }}" placeholder="Enter meta title">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="meta_keyword">Meta Keyword</label>
-                            <textarea class="form-control" name="meta_keyword">{{ $category->meta_keywords }}</textarea>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="meta_description">Meta Description</label>
-                            <textarea class="form-control" name="meta_description">{{ $category->meta_description }}</textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">

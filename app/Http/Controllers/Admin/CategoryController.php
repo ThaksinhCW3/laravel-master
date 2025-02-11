@@ -3,89 +3,68 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\CategoryFormRequest;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class CategoryController extends Controller
-{
-    public function index(){
-        return view('admin.category.index');
+class CategoryController extends Controller {
+    public function index() {
+        $categories = Category::all();
+        return view('admin.category.index', compact('categories'));
     }
 
-    public function create(){
+    public function create() {
         return view('admin.category.create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_keywords' => 'nullable|string',
-            'meta_description' => 'nullable|string',
-            'status' => 'nullable|integer',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
-    
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-        } else {
-            $imagePath = null;
-        }
-    
-        // Create Category
+
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('categories', 'public') : null;
+
         Category::create([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $imagePath,
-            'meta_title' => $request->meta_title,
-            'meta_keywords' => $request->meta_keywords,
-            'meta_description' => $request->meta_description,
-            'status' => $request->status == true ? '1' : '0',
         ]);
-    
-        return redirect()->route('admin.category.index')->with('success', 'Category added successfully!');
-    }    
-    public function edit($id){
-        $category = Category::findOrFail($id);
+
+        return redirect()->route('admin.category.index')->with('success', 'Category created successfully.');
+    }
+
+    //edit
+    public function edit(Category $category) {
         return view('admin.category.edit', compact('category'));
     }
-    public function update(Request $request, $id)
-    {
+
+    //Update a category with validation and image storage if provided.  If no image is provided, it will use the existing one.  If image is provided, it will delete the existing one and upload the new one.  If no new image is provided, it will keep the existing one.  It will also validate the name and description fields.  It will redirect to the category index page with a success message.  It will also handle any errors that occur during the update process and redirect
+    public function update(Request $request, Category $category) {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_keywords' => 'nullable|string',
-            'meta_description' => 'nullable|string',
-            'status' => 'nullable|boolean',
-    ]);
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
 
-        $category = Category::findOrFail($id);
-
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('categories', 'public');
-        $category->image = $imagePath;
-    }
+        if ($request->hasFile('image')) {
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+            $category->image = $request->file('image')->store('categories', 'public');
+        }
 
         $category->update([
             'name' => $request->name,
             'description' => $request->description,
-            'meta_title' => $request->meta_title,
-            'meta_keywords' => $request->meta_keywords,
-            'meta_description' => $request->meta_description,
-            'status' => $request->status == true ? '1' : '0',
-    ]);
+        ]);
 
-        return redirect()->route('admin.category.index')->with('success', 'Category updated successfully!');
+        return redirect()->route('admin.category.index')->with('success', 'Category updated successfully.');
     }
 
-    public function delete($id){
-        $category = Category::findOrFail($id);
+    //Delete a category
+    public function destroy(Category $category) {
+        
         $category->delete();
-        return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully!');
+        return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully.');
     }
- }
+}

@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\loginController as AdminloginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CartController;
+use App\Models\Product;
 
 Route::get('/', function () {
     return view('layouts.app');
@@ -37,19 +39,7 @@ Route::group(['prefix' => 'admin'],function(){
         Route::post('authenticate',[AdminLoginController::class,'authenticate'])->name('admin.authenticate');
     });
     //authed middleware
-    Route::group(['middleware' => 'auth'],function (){
-        Route::post('logout', [LoginController::class, 'logout'])->name('admin.logout');
-    //Dashboard routes
-        Route::get('dashboard',[AdminDashboardController::class,'dashboard'])->name('admin.dashboard');
-    //Category routes
     
-        Route::get('category', [CategoryController::class, 'index'])->name('admin.category.index');
-        Route::get('create', [CategoryController::class, 'create'])->name('admin.category.create');
-        Route::post('category', [CategoryController::class, 'store'])->name('admin.category.store');
-        Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('admin.category.edit');
-        Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
-        Route::delete('category/delete/{id}', [CategoryController::class, 'delete'])->name('admin.category.delete');
-    });
 });
         Route::get('/about', [FrontendController::class, 'about'])->name('about');
         Route::get('/blogs', [FrontendController::class, 'blogs'])->name('blogs');
@@ -62,5 +52,28 @@ Route::group(['prefix' => 'admin'],function(){
         Route::get('/cart', [FrontendController::class, 'cart'])->name('cart');
         Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
         Route::post('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
-
-
+        //new
+        Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+            Route::post('logout', [LoginController::class, 'logout'])->name('admin.logout');
+            Route::get('dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+            
+            // Category CRUD routes using resource
+            Route::resource('category', CategoryController::class)->names([
+                'index' => 'admin.category.index',
+                'create' => 'admin.category.create',
+                'store' => 'admin.category.store',
+                'show' => 'admin.category.show', // Optional
+                'edit'=> 'admin.category.edit',
+                'update' => 'admin.category.update',
+                'destroy' => 'admin.category.destroy',
+            ]);
+            Route::resource('product', ProductController::class)->names([
+                'index' => 'admin.product.index',
+                'create' => 'admin.product.create',
+                'store' => 'admin.product.store',
+                'show' => 'admin.product.show', // Optional
+                'edit'=> 'admin.product.edit',
+                'update' => 'admin.product.update',
+                'destroy' => 'admin.product.destroy',
+            ]);
+        });

@@ -9,8 +9,8 @@
 
         <div class="card">
             <div class="card-header">
-                <h4>Category
-                    <a href="{{ route('admin.category.create')}}" class="btn btn-primary btn-sm float-right">Create new category</a>
+                <h4>Products
+                    <a href="{{ route('admin.product.create')}}" class="btn btn-primary btn-sm float-right">Add product</a>
                 </h4>
             </div>
             <div class="card-body">
@@ -23,13 +23,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($categories as $category)
+                        @foreach($products as $product)
                             <tr>
-                                <td>{{ $category->id }}</td>
-                                <td>{{ $category->name }}</td>
+                                <td>{{ $product->id }}</td>
+                                <td>{{ $product->name }}</td>
                                 <td>
-                                    <a href="{{route('admin.category.edit', $category->id)}}"><i class="btn btn-success">Edit</i></a>
-                                    <form action="{{ route('admin.category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <a href="{{route('admin.product.edit', $product->id)}}"><i class="btn btn-success">Edit</i></a>
+                                    <form action="{{ route('admin.product.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                          @csrf
                                           @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -40,7 +40,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $categories->links()}}
+                {{ $products->links()}}
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header">
                <h4>Create New Category
-                <a href="{{ route('admin.category.index')}}" class="btn btn-primary btn-sm float-right">Back to category</a>
+                <a href="{{ route('admin.product.index')}}" class="btn btn-primary btn-sm float-right">Back to product</a>
                </h4>
             </div>
             <div class="card-body">
@@ -34,6 +34,29 @@
                         <div class="col-md-6 mb-3">
                             <label for="description">Description</label>
                             <textarea class="form-control" name="description" placeholder="Enter category description"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                        @foreach ()
+                            <select name="category" class="form-select selectpicker" data-live-search="true" required>
+                                <option value="">Select category</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}" {{ $product->id == $categories->id ? 'selected' : '' }}>
+                                        {{ $categories->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endforeach 
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="price">Price</label>
+                            <input type="number" class="form-control" name="price" placeholder="Enter category price">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="price">Quantity</label>
+                            <input type="number" class="form-control" name="price" placeholder="Enter category price">
                         </div>
 
                         <div class="col-md-6 mb-3">
