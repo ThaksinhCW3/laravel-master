@@ -21,7 +21,7 @@
                 @endif
 
                 {{-- Form for creating a new category --}}
-                <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="row">
@@ -37,12 +37,12 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                        @foreach ()
-                            <select name="category" class="form-select selectpicker" data-live-search="true" required>
+                        @foreach ($categories as $category)
+                            <select name="category" class="form-select" required>
                                 <option value="">Select category</option>
                                 @foreach ($products as $product)
-                                    <option value="{{ $product->id }}" {{ $product->id == $categories->id ? 'selected' : '' }}>
-                                        {{ $categories->name }}
+                                    <option value="{{ $product->id }}" {{ $product->id == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>

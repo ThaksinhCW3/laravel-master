@@ -22,7 +22,7 @@
                 @endif
 
                 {{-- Form for updating a category --}}
-                <form action="{{ route('admin.category.update', $category->id) }}" method="Put" enctype="multipart/form-data">
+                <form action="{{ route('admin.category.update', $category->category_id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('POST')                
 

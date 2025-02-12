@@ -18,20 +18,33 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Image</th>
                             <th>Name</th>
-                            <th>Actions</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($categories as $category)
                             <tr>
-                                <td>{{ $category->id }}</td>
-                                <td>{{ $category->name }}</td>
+                                <td>{{ $category->category_id }}</td>
                                 <td>
-                                    <a href="{{route('admin.category.edit', $category->id)}}"><i class="btn btn-success">Edit</i></a>
-                                    <form action="{{ route('admin.category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                         @csrf
-                                          @method('DELETE')
+                                    <img src="{{ asset($category->image) }}" alt="Category Image" width="100">
+                                </td>
+                                <td>{{ Str::limit($category->name) }}</td>
+                                <td>
+                                    {{ $category->status }}
+                                    @if ($category["status"]==true)
+                                        <a href="#" class="btn btn-success">Pubished</a>
+                                    @else
+                                        <a href="#" class="btn btn-danger">Unpublished</a>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{route('admin.category.edit', $category->category_id)}}"><i class="btn btn-success">Edit</i></a>
+                                    <form action="{{ route('admin.category.delete', $category->category_id) }}" method="POST" 
+                                        onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        @csrf
+                                        @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                       </form>
                                     </a>

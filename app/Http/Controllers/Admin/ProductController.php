@@ -21,9 +21,9 @@ class ProductController extends Controller
 {
     
     $products = Product::all();
-    dd($products);
-    $categories = Category::with('products:id,name,category_id')  // Correct columns in products
+    $categories = Category::with('products:category_id,name,category_id')  // Correct columns in products
                           ->get();
+                          
 
     return view('admin.product.create', compact('products', 'categories'));
 }
