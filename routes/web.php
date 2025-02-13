@@ -75,6 +75,7 @@ Route::group(['prefix' => 'admin'],function(){
             Route::post('update/{category}', [CategoryController::class, 'update'])->name('admin.category.update');
             Route::delete('delete/{category}', [CategoryController::class, 'delete'])->name('admin.category.delete');
 
+
             Route::resource('product', ProductController::class)->names([
                 'index' => 'admin.product.index',
                 'create' => 'admin.product.create',

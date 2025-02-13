@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -16,10 +16,8 @@ class Product extends Model
         'price',
         'quantity',
         'image',
-        'category_id'   // Ensure 'category_id' is fillable
+        'category_id'
     ];
-
-    // Correct the foreign key for 'category_id' here
     public function category() {
         return $this->belongsTo(Category::class, 'category_id');  // Reference category_id
     }

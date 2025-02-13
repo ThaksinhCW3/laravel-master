@@ -9,7 +9,6 @@ use App\Models\Product;
 class Category extends Model
 {
     use HasFactory;
-
     protected $primaryKey = 'category_id';
     protected $fillable = [
         'name',
@@ -17,11 +16,8 @@ class Category extends Model
         'image',
         'status'
     ];
-
-
-    // Correct foreign key here: products reference category_id
     public function products()
     {
-        return $this->hasMany(Product::class, 'category_id');  // Correct foreign key
+        return $this->hasMany(Product::class, 'category_id');
     }
 }

@@ -28,7 +28,7 @@
                             <tr>
                                 <td>{{ $category->category_id }}</td>
                                 <td>
-                                    <img src="{{ asset($category->image) }}" alt="Category Image" width="100">
+                                    <img src="{{ Storage::url($category->image) }}" alt="Category Image" width="200px" height="auto">
                                 </td>
                                 <td>{{ Str::limit($category->name) }}</td>
                                 <td>
