@@ -4,38 +4,40 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Category;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
+
+    //Show all products in admin panel
     public function index(){
         $products = Product::all();
         return view('admin.product.index', compact('products'));
     }
-    // public function create(){
-    //     return view('admin.product.create');
-    // }
+
+    //Show form to create new product
     public function create()
-{
-    
-    $products = Product::all();
-    $categories = Category::with('products:category_id,name,category_id')  // Correct columns in products
-                          ->get();
-                          
+    {                   
+        $products = Product::all();
+        $categories = Category::all();
+        return view('admin.product.create', compact('categories'));
+    }
 
-    return view('admin.product.create', compact('products', 'categories'));
-}
-
-
+    //Store data inside database
     public function store(Request $request) {
-        $request->validate([
+        $request->validate(
+        [
             'name' =>'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'quantity' => 'required|numeric',
+            'quantity' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ],
+        [
+            'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
+            'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ',
+            'image.max' => 'ຂະຫນາດຮູບບໍ່ຄວນເກີນ 20248 px'
         ]);
 
         $products = new Product;
@@ -52,12 +54,59 @@ class ProductController extends Controller
         $products->save();
         return redirect()->route('admin.product.index')->with('success', 'Product added successfully!');
     }
-
-    public function edit($id){
-        return view('admin.product.edit', compact('id'));
+    
+    //delete data from database
+    public function edit($product_id)
+     {
+        $product = Product::findOrFail($product_id);
+        return view('admin.product.edit', compact('product'));
     }
-    public function delete(Product $products){
+
+    //Update data in database
+    public function update(Request $request, $product_id)
+    {
+    $validatedData = $request ->validate([
+        'name' =>'required|string|max:255',
+        'description' => 'nullable|string',
+        'price' => 'required||double',
+        'quantity' => 'nullable|integer',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ],
+    [
+        'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
+        'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ'
+    ]);
+        $product = new Product;
+        $product-> $validatedData = ['name'];
+        $product-> $validatedData = ['description'];
+        $product-> $validatedData = ['price'];
+        $product-> $validatedData = ['quantity'];
+
+        // if ($request->hasFile('image')) {
+        //     Storage::delete($product->image);
+        //     $imagePath = $request->file('image')->store('products', 'public');
+        //     $product->image = $imagePath;
+        // }
+
+        if ($request->hasFile('image')) {
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+        $product->image = $request->file('image')->store('products', 'public');
+            }
+
+        $product->save();
+
+    return redirect()->route('admin.product.index')
+                    ->with('success', 'Product updated successfully!');
+    }
+
+    //Change status to active or inactive
+    public function delete($products){
+        $products = Product::findOrFail($products);
         $products->delete();
-        return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully.');
+
+        return redirect()->route('admin.category.index')
+        ->with('success', 'Category deleted successfully.');
     }
 }

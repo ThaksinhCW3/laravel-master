@@ -10,6 +10,7 @@
                </h4>
             </div>
             <div class="card-body">
+
                 {{-- Show validation errors --}}
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -22,7 +23,7 @@
                 @endif
 
                 {{-- Form for creating a new category --}}
-                <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="row">
@@ -43,15 +44,14 @@
                         </div>
                         
                         
-                    <div class="mb-3">
-                         <label class="form-label">Preview thumbnail image</label>
-                            <div   div id="imagePreviewContainer" 
-                                style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
-                                border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
-                            Empty
-                            </div>
-                    </div>      
-                                   
+                        <div class="mb-3">
+                            <label class="form-label">Preview thumbnail image</label>
+                                <div   div id="imagePreviewContainer" 
+                                    style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
+                                    border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
+                                Empty...
+                                </div>
+                        </div>     
 
                         <div class="col-md-12 mb-3">
                             <button type="submit" class="btn btn-success">Save Category</button>

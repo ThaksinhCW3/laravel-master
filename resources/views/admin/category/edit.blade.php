@@ -51,7 +51,7 @@
                                 <div   div id="imagePreviewContainer" 
                                     style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
                                     border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
-                                 Empty
+                                 Empty...
                                 </div>
                             @endif
                         </div>                           

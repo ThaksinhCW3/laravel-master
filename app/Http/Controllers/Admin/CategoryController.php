@@ -17,7 +17,8 @@ class CategoryController extends Controller {
     }
 
     //Create
-    public function create() {
+    public function create() 
+    {
         return view('admin.category.create');
     }
 
@@ -34,17 +35,22 @@ class CategoryController extends Controller {
             'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ',
             'image.max' => 'ຂະຫນາດຮູບບໍ່ຄວນເກີນ 20248 px'
         ]);
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('categories', 'public') : null;
+        
+        $cateogry = new Category;
+        $cateogry->name = $request->name;
+        $cateogry->description = $request->description;
 
-        Category::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $imagePath,
-        ]);
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+            $cateogry->image = $imagePath;
+        }
+
+        $cateogry->save();
         return redirect()->route('admin.category.index')->with('success', 'Category has been created successfully.');
     }
     //Redirect to edit page
-    public function edit(Category $category) {
+    public function edit(Category $category) 
+    {
         return view('admin.category.edit', compact('category'));
     }
 
@@ -54,10 +60,15 @@ class CategoryController extends Controller {
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Example validation for the image
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+    ],
+    [
+        'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
+        'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ'
     ]);
 
-        $category = Category::findOrFail($category_id);
+
+        $category = new Category;
         $category->name = $validatedData['name'];
         $category->description = $validatedData['description'];
 
@@ -91,4 +102,15 @@ class CategoryController extends Controller {
 
         return redirect()->route('admin.category.index')->with('success', 'Category has been deleted succesfully.');
     }
+    // In CategoryController.php
+
+    public function showCategoryWithProducts($categoryId)
+    {
+    $category = Category::with('products')->find($categoryId);
+    if (!$category) {
+        return redirect()->route('admin.category.index')->with('error', 'Category not found.');
+    }
+    return view('admin.category.show', compact('category'));
+    }
+
 }
