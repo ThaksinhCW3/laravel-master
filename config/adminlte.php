@@ -321,15 +321,18 @@ return [
             'can' => 'manage-blog',
         ],
         //Category
-        ['header' => 'Category and Products'],
+        ['header' => 'Category settings'],
         [
             'text' => 'Category',
-            'url' => 'admin/category'
+            'url' => 'admin/category',
+            'icon' => 'fas fa-fw fa-list'
         ],
         //Products
+        ['header' => 'Products settings'],
         [
             'text' => 'Products',
-            'url' => 'admin/product'
+            'url' => 'admin/product',
+            'icon' => 'fas fa-fw fa-shopping-bag',
         ],
         ['header' => 'account_settings'],
         [

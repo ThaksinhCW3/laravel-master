@@ -1,28 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {
-    let toggleSwitches = document.querySelectorAll(".toggle-status");
+function previewImage(event) {
+    const file = event.target.files[0];
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    const previewImage = document.getElementById('preview');
 
-    toggleSwitches.forEach((toggleSwitch) => {
-        toggleSwitch.addEventListener("change", function () {
-            let categoryId = this.dataset.id;
-            let statusLabel = this.closest(".form-check").querySelector(".status-label");
-
-            fetch(`/admin/category/toggle-status/${categoryId}`, {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    statusLabel.textContent = data.status ? "Published" : "Unpublished";
-                } else {
-                    alert("Failed to update status.");
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        });
-    });
-});
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (previewImage) {
+                // If an image exists, update its `src`
+                previewImage.src = e.target.result;
+            } else {
+                // If no image exists, replace the empty div with an image
+                previewContainer.innerHTML = `<img id="preview" src="${e.target.result}" alt="Preview Image" width="250" height="auto">`;
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}

@@ -1,10 +1,22 @@
 <div class="row">
     <div class="col-md-12">
 
-        @if (session('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
+        <!-- Show success message if any -->
+        @if (session('success'))
+                <div  id="success-alert" class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+        @endif
+                
+                {{-- Show error messages if any --}}
+        @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
         @endif
 
         <div class="card">
@@ -18,43 +30,57 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Image</th>
-                            <th>Name</th>
+                            <th>Thumbnail image</th>
+                            <th>Category name</th>
                             <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($categories as $category)
                             <tr>
+                                <!-- Category id -->
                                 <td>{{ $category->category_id }}</td>
+
+                                {{-- Thumbnail image --}}
                                 <td>
                                     <img src="{{ Storage::url($category->image) }}" alt="Category Image" width="200px" height="auto">
                                 </td>
+
+                                {{-- Category name --}}
                                 <td>{{ Str::limit($category->name) }}</td>
+
+                                {{-- Status toggleble --}}
                                 <td>
-                                    {{ $category->status }}
-                                    @if ($category["status"]==true)
-                                        <a href="#" class="btn btn-success">Pubished</a>
+                                    @if ($category->status == true)
+                                        <a href="{{ route('admin.category.change', $category->category_id) }}" class="btn btn-success">Published</a>
                                     @else
-                                        <a href="#" class="btn btn-danger">Unpublished</a>
+                                        <a href="{{ route('admin.category.change', $category->category_id) }}" class="btn btn-danger">Unpublished</a>
                                     @endif
                                 </td>
+                                
+                                 {{-- Action buttons --}}
                                 <td>
-                                    <a href="{{route('admin.category.edit', $category->category_id)}}"><i class="btn btn-success">Edit</i></a>
-                                    <form action="{{ route('admin.category.delete', $category->category_id) }}" method="POST" 
-                                        onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    {{-- Edit --}}
+                                    <a href="{{ route('admin.category.edit', $category->category_id) }}" class="d-inline-block">
+                                        <button class="btn btn-success">Edit</button>
+                                    </a>
+                                
+                                    {{-- Delete --}}
+                                    <form class="deleteBtn d-inline-block" action="{{ route('admin.category.delete', $category->category_id) }}" method="POST" data-name="{{ $category->name }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
-                                      </form>
-                                    </a>
+                                    </form>
                                 </td>
+                                
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                {{ $categories->links()}}
             </div>
         </div>
     </div>
 </div>
+<script src="{{ asset('js/admin/category/category-delete.js') }}"></script>
+<script src="{{ asset('js/admin/alert.js') }}"></script>

@@ -1,6 +1,7 @@
 @extends('admin.dashboard')
 
 @section('content')
+<div class="container">
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -10,7 +11,8 @@
                </h4>
             </div>
             <div class="card-body">
-                {{-- Show validation errors --}}
+                
+                {{-- Show error messages if any --}}
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -38,24 +40,21 @@
                             <textarea class="form-control" name="description">{{ $category->description }}</textarea>
                         </div>
 
-                        @if ($category->image)
-                            <div class="col-md-6 mb-3">
-                                <label for="image">Image</label>
-                                <input type="file" class="form-control" name="image" onchange="previewImage(event)">
-                                <br>
-                                <p>Preview Image</p>
-                                <img id="preview" src="{{ $category->image ? Storage::url($category->image) : asset('default.jpg') }}" alt="Preview Image" width="150">
-                            </div>                            
-                        @endif
-
                         <div class="col-md-6 mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <div class="form-check form-switch">
-                                <input type="hidden" name="status" value="0">
-                                <input class="form-check-input" type="checkbox" id="status" name="status" 
-                                    {{ $category->status == 1 ? 'checked' : '' }} data-toggle="toggle" data-on="Published" data-off="Unpublished" data-onstyle="success" data-offstyle="danger">
-                            </div>
-                        </div>                     
+                            <label for="image">Image</label>
+                            <input type="file" class="form-control" name="image" onchange="previewImage(event)">
+                            <br>
+                            <p>Preview Image</p>
+                            @if (!empty($category->image))
+                                <img id="preview" src="{{ Storage::url($category->image) }}" alt="Preview Image" width="250" height="auto">
+                            @else
+                                <div   div id="imagePreviewContainer" 
+                                    style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
+                                    border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
+                                 Empty
+                                </div>
+                            @endif
+                        </div>                           
 
                         <div class="col-md-12 mb-3">
                             <button type="submit" class="btn btn-success">Save Category</button>
@@ -66,16 +65,7 @@
         </div>
     </div>
 </div>
-@section('css')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
-@stop
-
-@section('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#status').bootstrapToggle();
-        });
-    </script>
-@stop
+</div>
+<script src="{{ asset('js/admin/category/category-edit.js') }}"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
