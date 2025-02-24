@@ -10,7 +10,7 @@
                </h4>
             </div>
             <div class="card-body">
-                
+
                 {{-- Show validation errors --}}
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -38,17 +38,12 @@
                             <textarea class="form-control" name="description" placeholder="Enter category description"></textarea>
                         </div>
 
-                        <!-- Product Category (Select) -->
-                        <div class="col-md-6 mb-3">
-                            <label for="category">Category</label>
-                            <select name="category_id" class="form-select" required>
-                                <option value="">Select category</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->category_id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('category_id') <small class="text-danger">{{$message}}</small>@enderror
-                        </div>                       
+                        <select name="category_id" class="form-select" required>
+                            <option value="">Select category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->category_id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>                     
 
                         <div class="col-md-6 mb-3">
                             <label for="price">Price</label>

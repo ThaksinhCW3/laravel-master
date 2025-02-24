@@ -12,7 +12,7 @@ class ProductController extends Controller {
 
     //Show all products in admin panel
     public function index(){
-        $products = Product::all();
+        $products = Product::with('category:category_id, name')->get();
         return view('admin.product.index', compact('products'));
     }
 
@@ -33,6 +33,7 @@ class ProductController extends Controller {
             'price' => 'required|numeric',
             'quantity' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category_id' => 'required|exists:categories,category_id'
         ],
         [
             'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
@@ -45,6 +46,7 @@ class ProductController extends Controller {
         $products->description = $request->description;
         $products->price = $request->price;
         $products->quantity = $request->quantity;
+        $products->category_id = $request->category_id;
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
@@ -57,30 +59,32 @@ class ProductController extends Controller {
     
     //delete data from database
     public function edit($product_id)
-     {
-        $product = Product::findOrFail($product_id);
-        return view('admin.product.edit', compact('product'));
-    }
-
-    //Update data in database
-    public function update(Request $request, $product_id)
     {
-    $validatedData = $request ->validate([
+        $product = Product::findOrFail($product_id);
+        $categories = Category::all(); // Fetch categories for the select dropdown
+        return view('admin.product.edit', compact('product', 'categories'));
+    }
+    //Update data in database
+    public function update(Request $request)
+    {
+    $request ->validate([
         'name' =>'required|string|max:255',
         'description' => 'nullable|string',
-        'price' => 'required||double',
+        'price' => 'required|numeric',
         'quantity' => 'nullable|integer',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'category_id' => 'required|exists:categories,category_id'
     ],
     [
         'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
         'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ'
     ]);
         $product = new Product;
-        $product-> $validatedData = ['name'];
-        $product-> $validatedData = ['description'];
-        $product-> $validatedData = ['price'];
-        $product-> $validatedData = ['quantity'];
+        $product-> name = $request->name;
+        $product-> description = $request->description;
+        $product-> price = $request->price;
+        $product-> quantity = $request->quantity;
+        $product-> category_id = $request->category_id;
 
         // if ($request->hasFile('image')) {
         //     Storage::delete($product->image);
@@ -101,12 +105,21 @@ class ProductController extends Controller {
                     ->with('success', 'Product updated successfully!');
     }
 
+    public function change($product_id){
+        $product = Product::findOrFail($product_id);
+        $product->status = !$product->status;
+        $product->save();
+
+        return redirect()->route('admin.product.index')
+                ->with('success', 'Product status has been changed successfully.');
+    }
+
     //Change status to active or inactive
     public function delete($products){
         $products = Product::findOrFail($products);
         $products->delete();
 
-        return redirect()->route('admin.category.index')
-        ->with('success', 'Category deleted successfully.');
+        return redirect()->route('admin.product.index')
+        ->with('success', 'product has been deleted successfully.');
     }
 }

@@ -14,7 +14,7 @@ class Index extends Component
 
     public function render()
     {
-        $Product = Product::orderBy('id','DESC')->paginate(10); // Fix: variable name is $categories
+        $Product = Product::orderBy('product_id','DESC')->paginate(10); // Fix: variable name is $categories
         return view('livewire.admin.product.index', ['products' => $Product]); // Fix: pass $categories
     }
 }

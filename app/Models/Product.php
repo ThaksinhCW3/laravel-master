@@ -18,7 +18,9 @@ class Product extends Model
         'image',
         'category_id'
     ];
+    // In Product model
     public function category() {
-        return $this->belongsTo(Category::class, 'category_id');  // Reference category_id
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
     }
+
 }
