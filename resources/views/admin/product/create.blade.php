@@ -5,9 +5,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-               <h4>Add new product
+                <h4>Add new product
                 <a href="{{ route('admin.product.index')}}" class="btn btn-primary btn-sm float-right">Back to product</a>
-               </h4>
+                </h4>
             </div>
             <div class="card-body">
 
@@ -25,7 +25,7 @@
                 {{-- Form for creating a new category --}}
                 <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="name">Name</label>
@@ -38,12 +38,16 @@
                             <textarea class="form-control" name="description" placeholder="Enter category description"></textarea>
                         </div>
 
-                        <select name="category_id" class="form-select" required>
-                            <option value="">Select category</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->category_id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>                     
+                        <div class="col-md-12 mb-3">
+                            <label for="category_id">Select category</label>
+                            <select name="category_id" class="form-select" required>
+                                <option value="">Select category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->category_id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('category_id') <small class="text-danger">{{$message}}</small>@enderror
+                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="price">Price</label>
@@ -51,8 +55,8 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="price">Quantity</label>
-                            <input type="number" class="form-control" name="price" placeholder="Enter category price">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" placeholder="Enter category price">
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -62,12 +66,12 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Preview thumbnail image</label>
-                                <div   div id="imagePreviewContainer" 
-                                    style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
-                                    border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
+                            <div id="imagePreviewContainer"
+                                 style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center;
+                                 border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
                                 Empty...
-                                </div>
-                        </div>  
+                            </div>
+                        </div>
 
                         <div class="col-md-12 mb-3">
                             <button type="submit" class="btn btn-success">Save product</button>

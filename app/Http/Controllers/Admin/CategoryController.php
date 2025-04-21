@@ -28,12 +28,12 @@ class CategoryController extends Controller {
         [
             'name' => 'required|string|max:50',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:4048',
         ],
         [
             'name.required' => 'ກະລຸນາໃສ່ຊື່ຫມວດສິນຄ້າ',
             'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ',
-            'image.max' => 'ຂະຫນາດຮູບບໍ່ຄວນເກີນ 20248 px'
+            'image.max' => 'ຂະຫນາດຮູບບໍ່ຄວນເກີນ 4048 px'
         ]);
         
         $cateogry = new Category;
@@ -56,34 +56,28 @@ class CategoryController extends Controller {
 
     //Update data in database
     public function update(Request $request, $category_id)
-    {
+{
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-    ],
-    [
-        'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
-        'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ'
     ]);
 
+    $category = Category::findOrFail($category_id); // ✅ Fix here
 
-        $category = new Category;
-        $category->name = $validatedData['name'];
-        $category->description = $validatedData['description'];
+    $category->name = $validatedData['name'];
+    $category->description = $validatedData['description'] ?? $category->description;
 
-         if ($request->hasFile('image')) {
-                if ($category->image) {
-                    Storage::disk('public')->delete($category->image);
-                }
-        $category->image = $request->file('image')->store('categories', 'public');
-            }
+    if ($request->hasFile('image')) {
+        if ($category->image) {Storage::disk('public')->delete($category->image);}
 
-        $category->save();
-
-    return redirect()->route('admin.category.index')
-                     ->with('success', 'Category has been updated successfully!'); 
+        $path = $request->file('image')->store('categories', 'public');
+        $category->image = $path;
     }
+    $category->save();
+
+    return redirect()->route('admin.category.index')->with('success', 'Category has been updated successfully!');
+}
 
     //Change status to active or inactive
     public function change($category_id){

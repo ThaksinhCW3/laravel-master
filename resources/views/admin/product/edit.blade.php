@@ -59,10 +59,19 @@
 
                             <div class="col-md-6 mb-3">
                                 <label for="image">Image</label>
-                                <input type="file" class="form-control" name="image">
-                                @if ($product->image)
-                                    <img src="{{ Storage::url($product->image) }}" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                <input type="file" class="form-control" name="image" onchange="previewImage(event)">
+                                <br>
+                                <p>Preview Image</p>
+                                @if (!empty($product->image))
+                                    <img id="preview" src="{{ Storage::url($product->image) }}" alt="Preview Image" width="40%" height="auto">
+                                @else
+                                    <div id="imagePreviewContainer" 
+                                        style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
+                                        border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
+                                     Empty...
+                                    </div>
                                 @endif
+                                </div>
                             </div>
 
                             <div class="col-md-12 mb-3">
@@ -75,4 +84,6 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('js/admin/product/product-edit.js') }}"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection

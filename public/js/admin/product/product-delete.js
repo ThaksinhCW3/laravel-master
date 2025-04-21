@@ -4,15 +4,15 @@ document.querySelectorAll('.deleteBtn').forEach(button => {
 
         let form = button.closest('form'); // Get the form element
         let urlToRedirect = form.getAttribute('action');
-        let category = form.dataset.name || "category"; // Default if no name is available
+        let product = form.dataset.name || "Product"; // Default if no name is available
 
         Swal.fire({
-            title: `Do you want to delete this category "${category}"?`,
+            title: `Do you want to delete this product "${product}"?`,
             text: "This action cannot be undone!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
+            cancelButtonColor: "#6c757d",
             confirmButtonText: "Yes, delete it!",
             cancelButtonText: "Cancel"
         }).then((result) => {

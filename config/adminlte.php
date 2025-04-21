@@ -110,15 +110,15 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
-        'mode' => 'fullscreen',
-        'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
-            'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
-        ],
+        'enabled' => false,
+        // 'mode' => 'fullscreen',
+        // 'img' => [
+        //     'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+        //     'alt' => 'AdminLTE Preloader Image',
+        //     'effect' => 'animation__shake',
+        //     'width' => 60,
+        //     'height' => 60,
+        // ],
     ],
 
     /*
@@ -134,7 +134,7 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
+    'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
     'usermenu_desc' => false,

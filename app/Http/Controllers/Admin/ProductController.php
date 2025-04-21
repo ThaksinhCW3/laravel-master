@@ -12,7 +12,7 @@ class ProductController extends Controller {
 
     //Show all products in admin panel
     public function index(){
-        $products = Product::with('category:category_id, name')->get();
+        $products = Product::with('category:category_id,name')->get();
         return view('admin.product.index', compact('products'));
     }
 
@@ -65,7 +65,7 @@ class ProductController extends Controller {
         return view('admin.product.edit', compact('product', 'categories'));
     }
     //Update data in database
-    public function update(Request $request)
+    public function update(Request $request, $product_id)
     {
     $request ->validate([
         'name' =>'required|string|max:255',
@@ -79,42 +79,34 @@ class ProductController extends Controller {
         'name.required' => 'ກະລຸນາໃສ່ຊື່ສິນຄ້າ',
         'name.max' => 'ຊື່ຫມວດບໍ່ຄວນເກີນ 50 ຕົວອັກສອນ'
     ]);
-        $product = new Product;
+        $product = Product::findOrFail($product_id);
         $product-> name = $request->name;
         $product-> description = $request->description;
         $product-> price = $request->price;
         $product-> quantity = $request->quantity;
         $product-> category_id = $request->category_id;
 
-        // if ($request->hasFile('image')) {
-        //     Storage::delete($product->image);
-        //     $imagePath = $request->file('image')->store('products', 'public');
-        //     $product->image = $imagePath;
-        // }
-
-        if ($request->hasFile('image')) {
-                if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
-                }
-        $product->image = $request->file('image')->store('products', 'public');
+    if ($request->hasFile('image')) {
+        if ($product->image) {Storage::disk('public')->delete($product->image);}
+ 
+        $path = $request->file('image')->store('products', 'public');
+        $product->image = $path;
             }
-
-        $product->save();
+    $product->save();
 
     return redirect()->route('admin.product.index')
                     ->with('success', 'Product updated successfully!');
     }
-
+    //Change status to active or inactive
     public function change($product_id){
         $product = Product::findOrFail($product_id);
         $product->status = !$product->status;
         $product->save();
 
         return redirect()->route('admin.product.index')
-                ->with('success', 'Product status has been changed successfully.');
+                ->with('success', 'Publish status has been changed successfully.');
     }
-
-    //Change status to active or inactive
+    //Delete data
     public function delete($products){
         $products = Product::findOrFail($products);
         $products->delete();

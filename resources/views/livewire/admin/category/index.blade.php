@@ -44,7 +44,7 @@
 
                                 {{-- Thumbnail image --}}
                                 <td>
-                                    <img src="{{ Storage::url($category->image) }}" alt="Category Image" width="200px" height="auto">
+                                    <img src="{{ asset('storage/' . $category->image) }}" alt="Category Image" width="200px">
                                 </td>
 
                                 {{-- Category name --}}

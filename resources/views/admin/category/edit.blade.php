@@ -46,9 +46,9 @@
                             <br>
                             <p>Preview Image</p>
                             @if (!empty($category->image))
-                                <img id="preview" src="{{ Storage::url($category->image) }}" alt="Preview Image" width="250" height="auto">
+                                <img id="preview" src="{{ Storage::url($category->image) }}" alt="Preview Image" width="40%" height="auto">
                             @else
-                                <div   div id="imagePreviewContainer" 
+                                <div id="imagePreviewContainer" 
                                     style="width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
                                     border: 2px dashed #ccc; color: #888; font-size: 14px; text-align: center; background: #f9f9f9;">
                                  Empty...

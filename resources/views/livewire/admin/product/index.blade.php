@@ -46,12 +46,18 @@
                                 <td>{{ $product->product_id }}</td>
                                 {{-- Thumbnail image --}}
                                 <td>
-                                    <img src="{{ Storage::url($product->image) }}" alt="Category Image" width="200px" height="auto">
+                                    @if (empty($product->image))
+                                        <div style="width: 200px; height: 150px; background-color: #f0f0f0; color: #777; display: flex; justify-content: center; align-items: center; font-size: 14px; border: 1px solid #ccc;">
+                                            No Thumbnail
+                                        </div>
+                                    @else
+                                        <img src="{{ asset('storage/' . $product->image) }}" alt="Category Image" width="200px" style="max-height: 150px; object-fit: contain;">
+                                    @endif
                                 </td>
                                 {{-- Product name --}}
                                 <td>{{ $product->name }}</td>
                                 {{-- Foreign key Category id --}}
-                                <td>{{ $product->categories->name }}</td>
+                                <td>{{ $product->category?->name }}</td>
                                 {{-- Product price --}}
                                 <td>{{ $product->price }}</td>
                                 {{-- Product quantity --}}
@@ -60,9 +66,17 @@
                                 {{-- Product status --}}
                                 <td>
                                     @if ($product->status == true)
-                                        <a href="{{ route('admin.product.change', $product->product_id) }}" class="btn btn-success">Published</a>
+                                        <form action="{{ route('admin.product.change', $product->product_id) }}" method="POST" class="statusBtnForm" data-name="{{ $product->name }}">
+                                            @csrf
+                                            @method('POST') {{-- Or PUT/PATCH depending on your route definition --}}
+                                            <button type="button" class="btn btn-success changeStatusBtn" data-status="publish">Published</button>
+                                        </form>
                                     @else
-                                        <a href="{{ route('admin.product.change', $product->product_id) }}" class="btn btn-danger">Unpublished</a>
+                                        <form action="{{ route('admin.product.change', $product->product_id) }}" method="POST" class="statusBtnForm" data-name="{{ $product->name }}">
+                                            @csrf
+                                            @method('POST') {{-- Or PUT/PATCH --}}
+                                            <button type="button" class="btn btn-danger changeStatusBtn" data-status="unpublish">Unpublished</button>
+                                        </form>
                                     @endif
                                 </td>
 
@@ -70,7 +84,7 @@
                                     <a href="{{ route('admin.product.edit', $product->product_id) }}" class="d-inline-block">
                                         <i class="btn btn-success">Edit</i>
                                     </a>
-                                    <form class="deleteBtn d-inline-block" action="{{ route('admin.product.delete', $product->product_id) }}" method="POST">
+                                    <form class="deleteBtn d-inline-block" action="{{ route('admin.product.delete', $product->product_id) }}" method="POST" data-name="{{ $product->name }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -85,3 +99,6 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('js/admin/product/product-delete.js') }}"></script>
+<script src={{ asset('js/admin/product/product-publish.js') }}></script>
+<script src="{{ asset('js/admin/alert.js') }}"></script>

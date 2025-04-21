@@ -65,7 +65,7 @@ Route::group(['prefix' => 'admin'],function(){
             Route::get('category/edit/{category}', [CategoryController::class, 'edit'])->name('admin.category.edit');
             Route::post('category/update/{category}', [CategoryController::class, 'update'])->name('admin.category.update');
             Route::delete('category/delete/{category}', [CategoryController::class, 'delete'])->name('admin.category.delete');
-            Route::get('category/change/{category}', [CategoryController::class, 'change'])->name('admin.category.change');    
+            Route::post('category/change/{category}', [CategoryController::class, 'change'])->name('admin.category.change');    
             Route::get('category/{category}', [CategoryController::class, 'showCategoryWithProducts'])->name('admin.category.show');
   
 
@@ -75,5 +75,5 @@ Route::group(['prefix' => 'admin'],function(){
             Route::get('product/edit/{product}', [ProductController::class, 'edit'])->name('admin.product.edit');
             Route::post('product/update/{product}', [ProductController::class, 'update'])->name('admin.product.update');
             Route::delete('product/delete/{product}', [ProductController::class, 'delete'])->name('admin.product.delete');
-            Route::get('product/change/{product}', [ProductController::class, 'change'])->name('admin.product.change');
+            Route::post('product/change/{product}', [ProductController::class, 'change'])->name('admin.product.change');
 });
